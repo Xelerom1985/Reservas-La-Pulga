@@ -14,6 +14,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const db = getDatabase(app)
 
-await update(ref(db, 'config'), { horaInicio: 8, horaFin: 23 })
-console.log('✓ Config actualizada: 08:00 a 22:00 (último turno)')
+await update(ref(db, 'config'), { horaInicio: 8, horaFin: 24 })
+console.log('✓ Config actualizada: 08:00 a 23:00 (último turno, termina 00:00)')
 process.exit(0)
