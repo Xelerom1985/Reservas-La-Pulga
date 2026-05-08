@@ -1,6 +1,6 @@
 export function getSlotsForDay(config) {
   const inicio = config?.horaInicio ?? 8
-  const fin = config?.horaFin ?? 22
+  const fin = config?.horaFin ?? 23
   const slots = []
   for (let h = inicio; h < fin; h++) {
     slots.push(`${String(h).padStart(2, '0')}:00`)
