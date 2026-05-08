@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+:root {
+  --primary: #800020;
+  --primary-light: #a00028;
+  --dark: #0d0306;
+  --dark2: #1a0509;
+  --dark3: #2a0d14;
+  --bg: #4a0f1b;
+  --cream: #f1e9d8;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background-color: var(--dark);
+  color: var(--cream);
+  font-family: system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#root { min-height: 100vh; }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--dark2); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
+
+input, select, textarea {
+  background: var(--dark3) !important;
+  color: var(--cream) !important;
+  border: 1px solid rgba(128,0,32,0.4) !important;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 15px;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 2px rgba(128,0,32,0.2);
+}
+input::placeholder, textarea::placeholder { color: rgba(241,233,216,0.35) !important; }
+select option { background: var(--dark3); }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.5;
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
