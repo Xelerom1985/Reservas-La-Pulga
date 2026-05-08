@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { db, ref, push, set } from '../firebase'
-import { getSlotsForDay, isDayClosed, formatDateDisplay } from '../utils/slots'
+import { getSlotsForDay, isDayClosed, formatDateDisplay, isBlockedBySchedule, getBlockLabel } from '../utils/slots'
 
 const MONTH_NAMES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
 const DAY_NAMES = ['D','L','M','M','J','V','S']
@@ -20,10 +20,12 @@ export default function Reservar({ onBack, turnos, config }) {
   const turnosDelDia = turnos.filter(t => t.fecha === selectedDate)
   const slots = getSlotsForDay(config)
 
-  const slotDisponibilidad = slots.map(hora => ({
-    hora,
-    ocupado: turnosDelDia.some(t => t.hora === hora),
-  }))
+  const slotDisponibilidad = slots.map(hora => {
+    const bloqueado = isBlockedBySchedule(selectedDate, hora, config)
+    const ocupado = turnosDelDia.some(t => t.hora === hora)
+    const label = bloqueado ? getBlockLabel(selectedDate, hora, config) : null
+    return { hora, ocupado: ocupado || bloqueado, bloqueado, label }
+  })
 
   const handleConfirm = async () => {
     const currentUser = user || (regNombre && regTel ? { nombre: regNombre, tel: regTel } : null)
@@ -154,22 +156,31 @@ export default function Reservar({ onBack, turnos, config }) {
               </p>
             ) : (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
-                {slotDisponibilidad.map(({ hora, ocupado }) => (
+                {slotDisponibilidad.map(({ hora, ocupado, bloqueado, label }) => (
                   <button
                     key={hora}
                     disabled={ocupado}
                     onClick={() => { setSelectedHora(hora); setStep(3) }}
                     style={{
                       padding: '14px 0', borderRadius: 12,
-                      background: ocupado ? 'rgba(255,255,255,0.03)' : 'rgba(128,0,32,0.15)',
-                      border: `1px solid ${ocupado ? 'rgba(255,255,255,0.06)' : 'rgba(128,0,32,0.4)'}`,
+                      background: bloqueado
+                        ? 'rgba(128,0,32,0.08)'
+                        : ocupado
+                          ? 'rgba(255,255,255,0.03)'
+                          : 'rgba(128,0,32,0.15)',
+                      border: `1px solid ${bloqueado ? 'rgba(128,0,32,0.2)' : ocupado ? 'rgba(255,255,255,0.06)' : 'rgba(128,0,32,0.4)'}`,
                       color: ocupado ? 'rgba(241,233,216,0.2)' : '#f1e9d8',
                       fontWeight: 600, fontSize: 15,
                       cursor: ocupado ? 'not-allowed' : 'pointer', lineHeight: 1.3,
                     }}
                   >
                     {hora}
-                    {ocupado && (
+                    {bloqueado && (
+                      <span style={{ display: 'block', fontSize: 9, fontWeight: 400, color: 'rgba(241,233,216,0.3)', marginTop: 2 }}>
+                        {label}
+                      </span>
+                    )}
+                    {!bloqueado && ocupado && (
                       <span style={{ display: 'block', fontSize: 10, fontWeight: 400, opacity: 0.7, marginTop: 2 }}>
                         Ocupado
                       </span>
