@@ -16,7 +16,7 @@ export function isDayClosed(dateStr, config) {
 }
 
 export function isBlockedBySchedule(dateStr, hora, config) {
-  if (!config?.bloqueados) return false
+  if (!dateStr || !config?.bloqueados) return false
   const [y, m, d] = dateStr.split('-').map(Number)
   const dayOfWeek = new Date(y, m - 1, d).getDay()
   const block = config.bloqueados?.[String(dayOfWeek)]
@@ -26,7 +26,7 @@ export function isBlockedBySchedule(dateStr, hora, config) {
 }
 
 export function getBlockLabel(dateStr, hora, config) {
-  if (!config?.bloqueados) return null
+  if (!dateStr || !config?.bloqueados) return null
   const [y, m, d] = dateStr.split('-').map(Number)
   const dayOfWeek = new Date(y, m - 1, d).getDay()
   const block = config.bloqueados?.[String(dayOfWeek)]
