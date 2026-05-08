@@ -52,13 +52,13 @@ export default function Admin() {
       </div>
 
       {/* Tabs en 2 filas */}
-      <div style={{ borderBottom: '1px solid rgba(128,0,32,0.2)' }}>
+      <div style={{ padding: '0 4px', borderBottom: '1px solid rgba(128,0,32,0.15)' }}>
         <div style={{ display: 'flex' }}>
           {TABS.slice(0, 2).map(t => (
             <TabButton key={t.id} tab={t} active={tab === t.id} onClick={() => setTab(t.id)} />
           ))}
         </div>
-        <div style={{ display: 'flex', borderTop: '1px solid rgba(128,0,32,0.1)' }}>
+        <div style={{ display: 'flex' }}>
           {TABS.slice(2).map(t => (
             <TabButton key={t.id} tab={t} active={tab === t.id} onClick={() => setTab(t.id)} />
           ))}
@@ -80,13 +80,15 @@ function TabButton({ tab, active, onClick }) {
     <button
       onClick={onClick}
       style={{
-        flex: 1, padding: '13px 4px',
-        background: 'transparent', border: 'none',
-        borderBottom: `2px solid ${active ? '#800020' : 'transparent'}`,
-        color: active ? '#f1e9d8' : 'rgba(241,233,216,0.4)',
-        fontSize: 13, fontWeight: active ? 600 : 400,
+        flex: 1, padding: '12px 6px', margin: '6px 4px',
+        background: active ? '#800020' : 'rgba(128,0,32,0.18)',
+        border: '1.5px solid #800020',
+        borderRadius: 10,
+        color: '#f1e9d8',
+        fontSize: 14, fontWeight: active ? 700 : 500,
         cursor: 'pointer', whiteSpace: 'nowrap',
-        transition: 'color 0.15s',
+        transition: 'all 0.15s',
+        opacity: active ? 1 : 0.65,
       }}
     >
       {tab.label}
